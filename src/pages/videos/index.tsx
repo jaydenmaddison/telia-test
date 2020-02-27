@@ -56,6 +56,27 @@ class VideosIndexPage extends React.Component<AllProps, State> {
     this.setState({ videoUrl: url })
   }
 
+  private renderVideo() {
+    const { videoUrl } = this.state
+
+    return (
+      <VideoPlayer
+        autoPlay
+        loop
+        muted
+        controls={['PlayPause', 'Seek', 'Time', 'Volume', 'Fullscreen']}
+        poster="http://sourceposter.jpg"
+        key={videoUrl}
+        onCanPlayThrough={() => {
+          // Do stuff
+        }}
+      >
+        <source src={videoUrl} type="video/webm" />
+        <track label="English" kind="subtitles" srcLang="en" src="http://source.vtt" default />
+      </VideoPlayer>
+    )
+  }
+
   private renderData() {
     const { data } = this.props
 
@@ -84,7 +105,7 @@ class VideosIndexPage extends React.Component<AllProps, State> {
     return (
       <Page>
         <Container>
-          <TableWrapper>
+          <VideoWrapper>
             {loading && (
               <LoadingOverlay>
                 <LoadingOverlayInner>
@@ -92,8 +113,9 @@ class VideosIndexPage extends React.Component<AllProps, State> {
                 </LoadingOverlayInner>
               </LoadingOverlay>
             )}
+            {this.renderVideo()}
             {this.renderData()}
-          </TableWrapper>
+          </VideoWrapper>
         </Container>
       </Page>
     )
@@ -119,39 +141,9 @@ const mapDispatchToProps = {
 // With redux v4's improved typings, we can finally omit generics here.
 export default connect(mapStateToProps, mapDispatchToProps)(VideosIndexPage)
 
-const TableWrapper = styled('div')`
+const VideoWrapper = styled('div')`
   position: relative;
   max-width: ${props => props.theme.widths.md};
   margin: 0 auto;
   min-height: 200px;
-`
-
-const TeamDetail = styled('td')`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  min-height: 66px;
-`
-
-const TeamLogo = styled('div')`
-  position: relative;
-  width: 50px;
-  height: 50px;
-
-  img {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-`
-
-const TeamName = styled('div')`
-  flex: 1 1 auto;
-  height: 100%;
-  margin-left: 1rem;
-
-  a {
-    color: ${props => props.theme.colors.brand};
-  }
 `
