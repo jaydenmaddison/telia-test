@@ -2,6 +2,7 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 
 import { DefaultPlayer as VideoPlayer } from 'react-html5video'
+import { Tooltip } from 'react-tippy'
 import styled from '../../utils/styled'
 import Page from '../../components/layout/Page'
 import Container from '../../components/layout/Container'
@@ -63,16 +64,14 @@ class VideosIndexPage extends React.Component<AllProps, State> {
       <VideoPlayer
         autoPlay
         loop
-        muted
         controls={['PlayPause', 'Seek', 'Time', 'Volume', 'Fullscreen']}
-        poster="http://sourceposter.jpg"
         key={videoUrl}
         onCanPlayThrough={() => {
           // Do stuff
         }}
       >
         <source src={videoUrl} type="video/webm" />
-        <track label="English" kind="subtitles" srcLang="en" src="http://source.vtt" default />
+        <track label="English" kind="subtitles" srcLang="en" default />
       </VideoPlayer>
     )
   }
@@ -81,21 +80,18 @@ class VideosIndexPage extends React.Component<AllProps, State> {
     const { data } = this.props
 
     return (
-      <div>
-        <h1>Videos!</h1>
+      <VideosListWrapper>
         {data.map((video, i) => {
           return (
-            <div>
-              <h1>{video.name}</h1>
-              <button type="button" onClick={() => this.handleClick(video.video)}>
-                Test
-              </button>
-              <img src={video.image} alt={video.name} />
-              <p>{video.description}</p>
-            </div>
+            <VideoListItem key={i} onClick={() => this.handleClick(video.video)}>
+              <Tooltip html={<StyledTooltip>{video.description}</StyledTooltip>} followCursor position="bottom" trigger="mouseenter">
+                <img src={video.image} alt={video.name} />
+                <VideoTitle>{video.name}</VideoTitle>
+              </Tooltip>
+            </VideoListItem>
           )
         })}
-      </div>
+      </VideosListWrapper>
     )
   }
 
@@ -146,4 +142,26 @@ const VideoWrapper = styled('div')`
   max-width: ${props => props.theme.widths.md};
   margin: 0 auto;
   min-height: 200px;
+`
+
+const VideosListWrapper = styled('div')`
+  display: flex;
+  flex-direction: row;
+`
+
+const VideoTitle = styled('h4')`
+  text-align: center;
+`
+const VideoListItem = styled('div')`
+  margin: 20px 10px 0 0;
+  cursor: pointer;
+  &:last-child {
+    margin-right: 0;
+  }
+`
+const StyledTooltip = styled('div')`
+  width: 300px;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  font-size: 80%;
 `
