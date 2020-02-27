@@ -1,7 +1,5 @@
 # telia-test
 
-> Demonstrating the common patterns when using React, Redux v4, and TypeScript.
-
 **Example deployment:** [(link)](https://telia-test.now.sh/)
 
 ## Getting started
