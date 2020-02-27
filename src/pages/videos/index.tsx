@@ -52,6 +52,32 @@ class VideosIndexPage extends React.Component<AllProps, State> {
     }
   }
 
+  private handleClick(url: string) {
+    this.setState({ videoUrl: url })
+  }
+
+  private renderData() {
+    const { data } = this.props
+
+    return (
+      <div>
+        <h1>Videos!</h1>
+        {data.map((video, i) => {
+          return (
+            <div>
+              <h1>{video.name}</h1>
+              <button type="button" onClick={() => this.handleClick(video.video)}>
+                Test
+              </button>
+              <img src={video.image} alt={video.name} />
+              <p>{video.description}</p>
+            </div>
+          )
+        })}
+      </div>
+    )
+  }
+
   public render() {
     const { loading } = this.props
 
@@ -66,6 +92,7 @@ class VideosIndexPage extends React.Component<AllProps, State> {
                 </LoadingOverlayInner>
               </LoadingOverlay>
             )}
+            {this.renderData()}
           </TableWrapper>
         </Container>
       </Page>
