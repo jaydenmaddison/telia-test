@@ -60,6 +60,10 @@ class VideosIndexPage extends React.Component<AllProps, State> {
   private renderVideo() {
     const { videoUrl } = this.state
 
+    if (!videoUrl) {
+      return <h1>Please select a video to watch</h1>
+    }
+
     return (
       <VideoPlayer
         autoPlay
@@ -84,7 +88,16 @@ class VideosIndexPage extends React.Component<AllProps, State> {
         {data.map((video, i) => {
           return (
             <VideoListItem key={i} onClick={() => this.handleClick(video.video)}>
-              <Tooltip html={<StyledTooltip>{video.description}</StyledTooltip>} followCursor position="bottom" trigger="mouseenter">
+              <Tooltip
+                html={
+                  <StyledTooltip>
+                    <p>{video.description}</p>
+                  </StyledTooltip>
+                }
+                followCursor
+                position="bottom"
+                trigger="mouseenter"
+              >
                 <img src={video.image} alt={video.name} />
                 <VideoTitle>{video.name}</VideoTitle>
               </Tooltip>
@@ -164,4 +177,7 @@ const StyledTooltip = styled('div')`
   background: rgba(255, 255, 255, 0.8);
   padding: 10px;
   font-size: 80%;
+  p {
+    margin: 0;
+  }
 `
